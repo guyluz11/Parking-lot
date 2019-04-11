@@ -125,7 +125,7 @@ bool switchF(int gatePin){    //  return 0 if the gate is prased and 1 if the ga
 void allOperationsForSection(int infraPin, int gatePin, int motorU, int motorD, bool &gateIsOpenOrClose, bool &toEnter1, bool &toEnter2, bool &closeNow, unsigned long &lastMili, char SectionNumber, int &littleBitMorClose, int &littelBitMorOpen){  
   if(toEnter2){ // If the gate is finishing the opening sequence
     if(millis()-lastMili >= delayV){  // Delaty time to close the gate after opening
-      Serial.println("close the gate"); // set all the variables to false and go to the else part which closes the gate
+      Serial.println("Close the gate"); // set all the variables to false and go to the else part which closes the gate
       toEnter2 = false;
       toEnter1 = false;
       closeNow = false;
@@ -138,7 +138,7 @@ void allOperationsForSection(int infraPin, int gatePin, int motorU, int motorD, 
         if(!switchF(gatePin)){  // If the swich is open 
         littelBitMorOpen = 0;  // Reset littleBitMorOpen
         gateIsOpenOrClose = true; // The gate is open
-        Serial.println("The gate is now open and can rest in peace");
+        Serial.println("The gate is now open");
         digitalWrite(motorU, LOW);  // Stop the motor
         toEnter2 = true; // Start counting time and then close the gate
         lastMili = millis(); // Get the current time of the iteration
@@ -158,7 +158,7 @@ void allOperationsForSection(int infraPin, int gatePin, int motorU, int motorD, 
         
           digitalWrite(motorD, LOW); // Stop the motor
           gateIsOpenOrClose = false; // The gate is not open anymore
-          Serial.println("The gates of heaven are now closed");
+          Serial.println("The gate is now closed");
           closeNow = false; // Stop the closing sequence
           littleBitMorClose = 0; // Reset littleBitMorClose
           if(SectionNumber == 'O'){ // If we are at the entrance
@@ -176,27 +176,27 @@ void allOperationsForSection(int infraPin, int gatePin, int motorU, int motorD, 
     }
     littleBitMorClose++;  //Add one to littleBitMorClose    
   }
-   else if(isObjectInTheSensor(infraPin)){  // enters if thare is object in the sensor and the gate is not open
-    if (!gateIsOpenOrClose) {  // if the gate is open do not open it more
-      if(SectionNumber == 'O' && enterCar >= maxCars){ //if maxCar in the parking lot dont let more cars in
-        
+   else if(isObjectInTheSensor(infraPin)){  // Check if there is a vehicle in the sensor
+    if (!gateIsOpenOrClose) {  // Check if the gate is closed or open
+      if(SectionNumber == 'O' && enterCar >= maxCars){ //Check if the section is the entrance and the entered cars passed the maximum number in the lot
+        // Don't do anything (Don't open the gate)
       }
       else{
-        toEnter1 = true; 
+        toEnter1 = true; //if there is slots available or a car wants to get out, open the gate
       }
     }
     else{
-      Serial.println("gate is open alredy");
+      Serial.println("The gate is already open ");
      }
     }
   else{
-      if(gateIsOpenOrClose) {  //  close the gate
+      if(gateIsOpenOrClose) {  //  Check if the gate is open
         gateIsOpenOrClose = false;
-        digitalWrite(motorD, HIGH); //start motor down
-        closeNow = true;
+        digitalWrite(motorD, HIGH); //Start closing the gate
+        closeNow = true; //Begin the gate closing sequence
       }
-      else{ //  if the gate close do not close it more
-        Serial.println("gate is close alredy so stop traying boy");
+      else{
+        Serial.println("The gate is already closed.");
       }
     } 
 }
@@ -206,10 +206,10 @@ void allOperationsForSection(int infraPin, int gatePin, int motorU, int motorD, 
 
 
 
-
-void sevenSegmentNumber(int number){  //Turn the seven segment LED so that it will creat the number from variable number, if number=-1 turn off seven segments
+//Cases for turning on the Seven Segment Display:
+void sevenSegmentNumber(int number){  
   switch(number){
-    case -1:  //  turn off the seven segment
+    case -1:  // On -1, turn off the entire screen.
     digitalWrite(upMLed, LOW);
     digitalWrite(upLLed, LOW);
     digitalWrite(midleMLed, LOW);
