@@ -9,3 +9,5 @@ Originally we planned to add an entrance condition, RFID card reader that would 
 but due to lack of time and pins on our Arduino board we decided to skip this idea, although we can tweak everything so this works if we want to.
 
 This folder includes the Arduino C code, the schematics diagram and a video of our built project.
+
+![Parking-lot video](https://user-images.githubusercontent.com/9304740/65291180-de9ecf00-db5a-11e9-94f3-bb9249de782d.gif)
